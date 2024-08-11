@@ -10,5 +10,12 @@ export class ChatCompletionDto {
     example:
       'An application which adds event tracking on the Hedera Consesnus service to an existing opensource kanban board.',
   })
-  prompt: string;
+  content: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Role',
+    example: 'user',
+  })
+  role: 'user' | 'system' | 'assistant';
 }

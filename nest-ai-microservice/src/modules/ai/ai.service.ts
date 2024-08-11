@@ -19,10 +19,7 @@ export class AiService {
         content:
           'You are an expert Product Owner and are creating a feature spec for an application based on the user prompt.',
       },
-      {
-        role: 'user',
-        content: dto.prompt,
-      },
+      dto,
     ];
     return this.openAiService.chatCompletion(messages);
   }
