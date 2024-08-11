@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { OpenAiService } from 'src/libs/ai/open.ai/openai.service';
 import { ChatCompletionDto } from './dto/chat.completion.dto';
 import { ChatCompletionMessageParam } from 'openai/resources';
+import { FormatSpecDto } from './dto/format-spec.dto';
 
 @Injectable()
 export class AiService {
-  constructor(private readonly openAiService: OpenAiService) {}
+  constructor(private readonly openAiService: OpenAiService) { }
 
   async listModels() {
     return this.openAiService.listModels();
@@ -23,6 +24,11 @@ export class AiService {
         content: dto.prompt,
       },
     ];
+    return this.openAiService.chatCompletion(messages);
+  }
+
+  async formatSpec(dto: FormatSpecDto) {
+    const messages: ChatCompletionMessageParam[] = [];
     return this.openAiService.chatCompletion(messages);
   }
 }
