@@ -5,5 +5,5 @@ import { IsString, MaxLength, MinLength } from 'class-validator';
 export class FormatSpecDto {
   @IsString()
   @ApiProperty({})
-  spec: string;
+  content: string;
 }
