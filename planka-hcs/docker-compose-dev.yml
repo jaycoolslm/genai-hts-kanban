@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  server:
+    platform: linux/amd64
+    build:
+      context: ./server
+      dockerfile: ../config/development/Dockerfile.server
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:password@postgres:5432/planka_db
+      - SECRET_KEY=notsecretkey
+
+      # - TRUST_PROXY=0
+      # - TOKEN_EXPIRES_IN=365 # In days
+
+      # related: https://github.com/knex/knex/issues/2354
+      # As knex does not pass query parameters from the connection string we
+      # have to use environment variables in order to pass the desired values, e.g.
+      # - PGSSLMODE=<value>
+
+      # Configure knex to accept SSL certificates
+      # - KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE=false
+
+      # - ALLOW_ALL_TO_CREATE_PROJECTS=true
+
+      # - OIDC_ISSUER=
+      # - OIDC_CLIENT_ID=
+      # - OIDC_CLIENT_SECRET=
+      # - OIDC_ID_TOKEN_SIGNED_RESPONSE_ALG=
+      # - OIDC_USERINFO_SIGNED_RESPONSE_ALG=
+      # - OIDC_SCOPES=openid email profile
+      # - OIDC_RESPONSE_MODE=fragment
+      # - OIDC_USE_DEFAULT_RESPONSE_MODE=true
+      # - OIDC_ADMIN_ROLES=admin
+      # - OIDC_EMAIL_ATTRIBUTE=email
+      # - OIDC_NAME_ATTRIBUTE=name
+      # - OIDC_USERNAME_ATTRIBUTE=preferred_username
+      # - OIDC_ROLES_ATTRIBUTE=groups
+      # - OIDC_IGNORE_USERNAME=true
+      # - OIDC_IGNORE_ROLES=true
+      # - OIDC_ENFORCED=true
+
+      # Email Notifications (https://nodemailer.com/smtp/)
+      # - SMTP_HOST=
+      # - SMTP_PORT=587
+      # - SMTP_NAME=
+      # - SMTP_SECURE=true
+      # - SMTP_USER=
+      # - SMTP_PASSWORD=
+      # - SMTP_FROM="Demo Demo" <demo@demo.demo>
+
+      # Optional fields: accessToken, events, excludedEvents
+      # - |
+      #   WEBHOOKS=[{
+      #     "url": "http://localhost:3001",
+      #     "accessToken": "notaccesstoken",
+      #     "events": ["cardCreate", "cardUpdate", "cardDelete"],
+      #     "excludedEvents": ["notificationCreate", "notificationUpdate"]
+      #   }]
+
+      # - SLACK_BOT_TOKEN=
+      # - SLACK_CHANNEL_ID=
+    working_dir: /app
+    command: ["sh", "-c", "npm run start"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    platform: linux/amd64
+    build:
+      context: ./
+      dockerfile: ./config/development/Dockerfile.client
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - BASE_URL=http://localhost:3000
+      - REACT_APP_SERVER_BASE_URL=http://localhost:3000
+      - REACT_APP_HEDERA_CLIENT_ID=0.0.4661228 # this is a testnet account
+      - REACT_APP_HEDERA_CLIENT_KEY=302e020100300506032b657004220420d02c953c2a85e819de1caba134f80bcfd6ab7aff6453b7968484be1c2f83beff # this is a testnet account
+      - REACT_APP_HEDERA_TOPIC_ID=0.0.4661206
+    working_dir: /app/client
+    command: npm start
+
+  init-db:
+    build:
+      context: ./server
+      dockerfile: ../config/development/Dockerfile.server
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/planka_db
+
+      - DEFAULT_ADMIN_EMAIL=demo@demo.demo # Do not remove if you want to prevent this user from being edited/deleted
+      - DEFAULT_ADMIN_PASSWORD=demo
+      - DEFAULT_ADMIN_NAME=Demo Demo
+      - DEFAULT_ADMIN_USERNAME=demo
+      - DEFAULT_ADMIN_HEDERA_ACCOUNT=0.0.2599594
+    working_dir: /app
+    command: ["sh", "-c", "npm run db:init"]
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: planka_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d planka_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./config/development/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - server
+      - client
+
+volumes:
+  db-data:
