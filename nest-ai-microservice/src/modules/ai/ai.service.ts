@@ -20,6 +20,8 @@ export class AiService {
       },
       ...dto,
     ];
+
+    //TODO: If messages > X, then summarize the conversation to optimize token usage/cost
     return this.openAiService.chatCompletion(messages);
   }
 }
