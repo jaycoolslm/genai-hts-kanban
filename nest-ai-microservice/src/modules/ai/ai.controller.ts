@@ -31,7 +31,7 @@ export class AiController {
     description: 'Performs a chat completion',
     summary: 'Performs a chat completion',
   })
-  async complete(@Body() dto: ChatCompletionDto) {
+  async complete(@Body() dto: ChatCompletionDto[]) {
     return this.service.completion(dto);
   }
 }

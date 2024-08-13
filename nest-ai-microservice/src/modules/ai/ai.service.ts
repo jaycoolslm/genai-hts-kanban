@@ -11,14 +11,14 @@ export class AiService {
     return this.openAiService.listModels();
   }
 
-  async completion(dto: ChatCompletionDto) {
+  async completion(dto: ChatCompletionDto[]) {
     const messages: ChatCompletionMessageParam[] = [
       {
         role: 'system',
         content:
           'You are an expert Product Owner and are creating a feature spec for an application based on the user prompt.',
       },
-      dto,
+      ...dto,
     ];
     return this.openAiService.chatCompletion(messages);
   }
