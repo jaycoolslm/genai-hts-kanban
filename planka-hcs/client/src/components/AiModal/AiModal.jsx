@@ -1,8 +1,17 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, Modal, Message, Loader, TextArea } from 'semantic-ui-react';
-import { Input, Markdown } from '../../lib/custom-ui';
+import {
+  Button,
+  Form,
+  Modal,
+  Message,
+  Loader,
+  TextArea,
+  ButtonGroup,
+  Header,
+} from 'semantic-ui-react';
+import { Markdown } from '../../lib/custom-ui';
 
 import { useForm } from '../../hooks';
 
@@ -28,7 +37,7 @@ const AiModal = React.memo(
         };
 
         if (!message.content) {
-          messageContentField.current.select();
+          messageContentField.current.ref.current.select();
           return;
         }
 
@@ -60,20 +69,47 @@ const AiModal = React.memo(
           {stateData?.messages.map((item) => (
             <div
               className={
-                styles[item.role === 'user' ? 'message-container-right' : 'message-container-left']
+                styles[
+                  item.role === 'user' ? 'message-container-request' : 'message-container-response'
+                ]
               }
               key={item.id}
             >
-              <Message floating compact>
-                <Markdown>{item.content}</Markdown>
-              </Message>
+              <div
+                className={
+                  styles[
+                    item.role === 'user' ? 'message-wrapper-request' : 'message-wrapper-response'
+                  ]
+                }
+              >
+                {item.role === 'assistant' && (
+                  <Header className={styles['message-header']} as="h4">
+                    Assistant:
+                  </Header>
+                )}
+                <Message className={styles['message-no-margin']} floating compact>
+                  <Markdown>{item.content}</Markdown>
+                </Message>
+                {item.role === 'user' ? (
+                  <Button
+                    circular
+                    basic
+                    icon="edit"
+                    size="mini"
+                    className={styles['message-button']}
+                  />
+                ) : (
+                  <ButtonGroup basic size="mini" className={styles['message-button']}>
+                    <Button icon="copy outline" />
+                    <Button icon="sync alternate" />
+                  </ButtonGroup>
+                )}
+              </div>
             </div>
           ))}
           {stateData.isSubmitting && (
             <Message floating compact>
-              <Markdown>
-                <Loader active size="tiny" inverted />
-              </Markdown>
+              <Loader active size="tiny" inverted />
             </Message>
           )}
         </Modal.Content>
@@ -107,8 +143,7 @@ const AiModal = React.memo(
                     circular
                     className={styles['submit-button']}
                     size="medium"
-                    icon="arrow up"
-                    // disabled={stateData.isSubmitting}
+                    icon={stateData.isSubmitting ? 'stop' : 'arrow up'}
                   />
                 </div>
               </div>
