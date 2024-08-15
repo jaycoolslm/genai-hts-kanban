@@ -23,6 +23,8 @@ export function* createAiMessage(data) {
     yield put(actions.createAiMessage.success(responseLocalId, choices[0].message));
     yield put(actions.createAiMessage.IsSubmitting(false));
   } catch (error) {
+    yield put(actions.createAiMessage.failure(error));
+    yield put(actions.createAiMessage.IsSubmitting(false));
     console.error(error);
   }
 }

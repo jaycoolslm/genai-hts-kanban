@@ -108,9 +108,30 @@ const AiModal = React.memo(
             </div>
           ))}
           {stateData.isSubmitting && (
-            <Message floating compact>
-              <Loader active size="tiny" inverted />
-            </Message>
+            <>
+              <Header className={styles['message-header']} as="h4">
+                Assistant:
+              </Header>
+              <Message floating compact>
+                <Loader active size="tiny" inverted />
+              </Message>
+            </>
+          )}
+
+          {stateData.hasError && (
+            <>
+              <Header className={styles['message-header']} as="h4">
+                Assistant:
+              </Header>
+              <Message
+                size="small"
+                floating
+                compact
+                negative
+                header="Something went wrong while generating the response."
+                content="Please try again. If this issue persists please contact us."
+              />
+            </>
           )}
         </Modal.Content>
         <Modal.Actions>

@@ -17,6 +17,13 @@ createAiMessage.success = (localId, message) => ({
   },
 });
 
+createAiMessage.failure = (error) => ({
+  type: ActionTypes.AI_MESSAGE_CREATE__FAILURE,
+  payload: {
+    error,
+  },
+});
+
 createAiMessage.IsSubmitting = (isSubmitting) => ({
   type: ActionTypes.AI_MESSAGE_CREATE__IS_SUBMITTING,
   payload: {
