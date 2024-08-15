@@ -47,6 +47,10 @@ const AiModal = React.memo(
       [onCreate, data, handleFieldChange],
     );
 
+    const handleCopy = useCallback((content) => {
+      navigator.clipboard.writeText(content);
+    }, []);
+
     useEffect(() => {
       // Auto resize textarea
       messageContentField.current.ref.current.style.height = 'auto';
@@ -66,31 +70,33 @@ const AiModal = React.memo(
         </Modal.Header>
 
         <Modal.Content scrolling className={styles['modal-content']}>
-          {stateData?.messages.map((item) => (
+          {stateData?.messages.map((message) => (
             <div
               className={
                 styles[
-                  item.role === 'user' ? 'message-container-request' : 'message-container-response'
+                  message.role === 'user'
+                    ? 'message-container-request'
+                    : 'message-container-response'
                 ]
               }
-              key={item.id}
+              key={message.id}
             >
               <div
                 className={
                   styles[
-                    item.role === 'user' ? 'message-wrapper-request' : 'message-wrapper-response'
+                    message.role === 'user' ? 'message-wrapper-request' : 'message-wrapper-response'
                   ]
                 }
               >
-                {item.role === 'assistant' && (
+                {message.role === 'assistant' && (
                   <Header className={styles['message-header']} as="h4">
                     Assistant:
                   </Header>
                 )}
                 <Message className={styles['message-no-margin']} floating compact>
-                  <Markdown>{item.content}</Markdown>
+                  <Markdown>{message.content}</Markdown>
                 </Message>
-                {item.role === 'user' ? (
+                {message.role === 'user' ? (
                   <Button
                     circular
                     basic
@@ -100,7 +106,7 @@ const AiModal = React.memo(
                   />
                 ) : (
                   <ButtonGroup basic size="mini" className={styles['message-button']}>
-                    <Button icon="copy outline" />
+                    <Button icon="copy outline" onClick={() => handleCopy(message.content)} />
                     <Button icon="sync alternate" />
                   </ButtonGroup>
                 )}
