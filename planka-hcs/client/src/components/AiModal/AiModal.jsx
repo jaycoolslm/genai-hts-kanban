@@ -18,7 +18,7 @@ import { useForm } from '../../hooks';
 import styles from './AiModal.module.scss';
 
 const AiModal = React.memo(
-  ({ stateData = { messages: [], isSubmitting: false }, onCreate, onClose }) => {
+  ({ stateData = { messages: [], isSubmitting: false }, onRegenerate, onCreate, onClose }) => {
     const [t] = useTranslation();
 
     const messageContentField = useRef(null);
@@ -107,7 +107,7 @@ const AiModal = React.memo(
                 ) : (
                   <ButtonGroup basic size="mini" className={styles['message-button']}>
                     <Button icon="copy outline" onClick={() => handleCopy(message.content)} />
-                    <Button icon="sync alternate" />
+                    <Button icon="sync alternate" onClick={() => onRegenerate()} />
                   </ButtonGroup>
                 )}
               </div>
@@ -142,40 +142,54 @@ const AiModal = React.memo(
         </Modal.Content>
         <Modal.Actions>
           {/* <p>{t('common.enterProjectTitle')}</p> */}
-          <Form onSubmit={handleSubmit}>
-            <div className={styles['form-content-wrapper']}>
-              <div className={styles['form-content']}>
-                <div className={styles['textarea-wrapper']}>
-                  <TextArea
-                    rows={1}
-                    ref={messageContentField}
-                    placeholder={t('common.enterMessage')}
-                    name="messageContent"
-                    value={data.messageContent}
-                    disabled={stateData.isSubmitting}
-                    className={styles.textarea}
-                    onChange={handleFieldChange}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSubmit(e);
-                      }
-                    }}
-                  />
-                </div>
+          {stateData.hasError ? (
+            <div className={styles['form-error-container']}>
+              <Header as="h4">There was an error generating a response</Header>
+              <Button
+                circular
+                secondary
+                onClick={() => onRegenerate()}
+                className={styles['submit-button']}
+              >
+                Regenerate
+              </Button>
+            </div>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <div className={styles['form-content-wrapper']}>
+                <div className={styles['form-content']}>
+                  <div className={styles['textarea-wrapper']}>
+                    <TextArea
+                      rows={1}
+                      ref={messageContentField}
+                      placeholder={t('common.enterMessage')}
+                      name="messageContent"
+                      value={data.messageContent}
+                      disabled={stateData.isSubmitting}
+                      className={styles.textarea}
+                      onChange={handleFieldChange}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
+                    />
+                  </div>
 
-                <div>
-                  <Button
-                    secondary
-                    circular
-                    className={styles['submit-button']}
-                    size="medium"
-                    icon={stateData.isSubmitting ? 'stop' : 'arrow up'}
-                  />
+                  <div>
+                    <Button
+                      secondary
+                      circular
+                      className={styles['submit-button']}
+                      size="medium"
+                      icon={stateData.isSubmitting ? 'stop' : 'arrow up'}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+          )}
         </Modal.Actions>
       </Modal>
     );
@@ -184,6 +198,7 @@ const AiModal = React.memo(
 
 AiModal.propTypes = {
   stateData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  onRegenerate: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };

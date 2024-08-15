@@ -23,6 +23,17 @@ export default (state = initialState, { type, payload }) => {
         hasError: true,
         error: payload.error,
       };
+    case ActionTypes.AI_ERROR_CLEAR:
+      return {
+        ...state,
+        hasError: false,
+        error: null,
+      };
+    case ActionTypes.AI_MESSAGE_DELETE:
+      return {
+        ...state,
+        messages: state.messages.filter(({ id }) => id !== payload.id),
+      };
     case ActionTypes.AI_MESSAGE_CREATE__IS_SUBMITTING:
       return {
         ...state,

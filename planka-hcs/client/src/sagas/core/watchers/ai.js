@@ -8,5 +8,8 @@ export default function* aiWatchers() {
     takeEvery(EntryActionTypes.AI_MESSAGE_CREATE, ({ payload: { data } }) =>
       services.createAiMessage(data),
     ),
+    takeEvery(EntryActionTypes.AI_MESSAGE_REGENERATE_RESPONSE, () =>
+      services.regenerateAiResponse(),
+    ),
   ]);
 }

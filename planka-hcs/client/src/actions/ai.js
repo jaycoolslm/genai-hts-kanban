@@ -31,6 +31,20 @@ createAiMessage.IsSubmitting = (isSubmitting) => ({
   },
 });
 
+const deleteAiMessage = (messageId) => ({
+  type: ActionTypes.AI_MESSAGE_DELETE,
+  payload: {
+    id: messageId,
+  },
+});
+
+const clearAiCreateMessageError = () => ({
+  type: ActionTypes.AI_ERROR_CLEAR,
+  payload: {},
+});
+
 export default {
   createAiMessage,
+  deleteAiMessage,
+  clearAiCreateMessageError,
 };

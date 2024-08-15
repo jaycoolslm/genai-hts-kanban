@@ -9,6 +9,7 @@ const mapStateToProps = ({ ai: stateData }) => ({ stateData });
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
+      onRegenerate: entryActions.aiMessageRegenerateResponse,
       onCreate: entryActions.aiMessageCreate,
       onClose: entryActions.closeModal,
     },
