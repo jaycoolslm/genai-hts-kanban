@@ -4,13 +4,21 @@ import { ChatCompletionDto } from './dto/chat.completion.dto';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import { FormatSpecDto } from './dto/format-spec.dto';
 import { projectSchema } from 'src/libs/zod/format-spec.schema';
+import { SPEC_QUESTIONS } from 'src/libs/constants/spec-questions';
 
 @Injectable()
 export class AiService {
-  constructor(private readonly openAiService: OpenAiService) {}
+  constructor(private readonly openAiService: OpenAiService) { }
 
   async listModels() {
     return this.openAiService.listModels();
+  }
+
+  listSpecQuestions(): ChatCompletionMessageParam {
+    return {
+      role: 'assistant',
+      content: SPEC_QUESTIONS,
+    };
   }
 
   async completion(dto: ChatCompletionDto) {
