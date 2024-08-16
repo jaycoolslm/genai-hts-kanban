@@ -5,6 +5,7 @@ import { ChatCompletionMessageParam } from 'openai/resources';
 import { FormatSpecDto } from './dto/format-spec.dto';
 import { projectSchema } from 'src/libs/zod/format-spec.schema';
 import { SPEC_QUESTIONS } from 'src/libs/constants/spec-questions';
+import generateSpecPrompt from 'src/libs/ai/prompts/generate-spec.prompt';
 
 @Injectable()
 export class AiService {
@@ -22,14 +23,7 @@ export class AiService {
   }
 
   async completion(dto: ChatCompletionDto) {
-    const messages: ChatCompletionMessageParam[] = [
-      {
-        role: 'system',
-        content:
-          'You are an expert Product Owner and are creating a feature spec for an application based on the user prompt.',
-      },
-      dto,
-    ];
+    const messages: ChatCompletionMessageParam[] = [...generateSpecPrompt, dto];
     return this.openAiService.chatCompletion(messages);
   }
 
