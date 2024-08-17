@@ -18,16 +18,45 @@ import { useForm } from '../../hooks';
 import styles from './AiModal.module.scss';
 
 const AiModal = React.memo(
-  ({ stateData = { messages: [], isSubmitting: false }, onRegenerate, onCreate, onClose }) => {
+  ({
+    stateData = { messages: [], isSubmitting: false },
+    onRegenerate,
+    onCreate,
+    onProjectCreate,
+    isSubmitting,
+    onClose,
+  }) => {
     const [t] = useTranslation();
 
     const messageContentField = useRef(null);
 
+    // form data for submitting project
+    const handleProjectSubmit = useCallback(
+      (e) => {
+        e.preventDefault();
+
+        const { content } = stateData.messages.at(-1);
+
+        const cleanData = {
+          content: content.trim(),
+        };
+
+        if (!cleanData.content) {
+          messageContentField.current.ref.current.select();
+          return;
+        }
+
+        onProjectCreate(cleanData);
+      },
+      [onProjectCreate, stateData],
+    );
+
+    // form data for AI Chat messages
     const [data, handleFieldChange] = useForm(() => ({
       messageContent: '',
     }));
 
-    const handleSubmit = useCallback(
+    const handleMessageSubmit = useCallback(
       (e) => {
         e.preventDefault();
 
@@ -107,7 +136,7 @@ const AiModal = React.memo(
                 ) : (
                   <ButtonGroup basic size="mini" className={styles['message-button']}>
                     <Button icon="copy outline" onClick={() => handleCopy(message.content)} />
-                    <Button icon="sync alternate" onClick={() => onRegenerate()} />
+                    <Button icon="sync alternate" onClick={onRegenerate} />
                   </ButtonGroup>
                 )}
               </div>
@@ -139,23 +168,32 @@ const AiModal = React.memo(
               />
             </>
           )}
+
+          {stateData.messages.length > 1 && (
+            <Form onSubmit={handleProjectSubmit} className={styles['message-container-request']}>
+              <Button
+                inverted
+                color="green"
+                icon="checkmark"
+                content={t('action.createProject')}
+                floated="right"
+                loading={isSubmitting}
+                disabled={isSubmitting}
+              />
+            </Form>
+          )}
         </Modal.Content>
         <Modal.Actions>
           {/* <p>{t('common.enterProjectTitle')}</p> */}
           {stateData.hasError ? (
             <div className={styles['form-error-container']}>
               <Header as="h4">There was an error generating a response</Header>
-              <Button
-                circular
-                secondary
-                onClick={() => onRegenerate()}
-                className={styles['submit-button']}
-              >
+              <Button circular secondary onClick={onRegenerate} className={styles['submit-button']}>
                 Regenerate
               </Button>
             </div>
           ) : (
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleMessageSubmit}>
               <div className={styles['form-content-wrapper']}>
                 <div className={styles['form-content']}>
                   <div className={styles['textarea-wrapper']}>
@@ -171,7 +209,7 @@ const AiModal = React.memo(
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();
-                          handleSubmit(e);
+                          handleMessageSubmit(e);
                         }
                       }}
                     />
@@ -200,6 +238,8 @@ AiModal.propTypes = {
   stateData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   onRegenerate: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
+  onProjectCreate: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

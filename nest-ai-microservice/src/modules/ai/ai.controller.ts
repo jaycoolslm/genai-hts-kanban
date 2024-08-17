@@ -14,7 +14,7 @@ import { FormatSpecDto } from './dto/format-spec.dto';
 
 @Controller('ai')
 export class AiController {
-  constructor(private readonly service: AiService) { }
+  constructor(private readonly service: AiService) {}
 
   @Get('models')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -53,6 +53,7 @@ export class AiController {
     summary: 'Format project specification',
   })
   async formatSpec(@Body() dto: FormatSpecDto) {
+    console.log('invoked format spec endoint');
     return this.service.formatSpec(dto);
   }
 }
