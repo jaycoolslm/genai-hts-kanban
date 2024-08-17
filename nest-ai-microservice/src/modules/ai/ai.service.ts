@@ -22,8 +22,11 @@ export class AiService {
     };
   }
 
-  async completion(dto: ChatCompletionDto) {
-    const messages: ChatCompletionMessageParam[] = [...generateSpecPrompt, dto];
+  async completion(dto: ChatCompletionDto[]) {
+    const messages: ChatCompletionMessageParam[] = [
+      ...generateSpecPrompt,
+      ...dto,
+    ];
     return this.openAiService.chatCompletion(messages);
   }
 
