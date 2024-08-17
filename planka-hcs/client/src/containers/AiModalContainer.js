@@ -23,7 +23,7 @@ const mapStateToProps = ({
   ui: {
     projectCreateForm: { data: defaultData, isSubmitting },
   },
-}) => ({ stateData: { ...stateData, messages: mockMessages }, defaultData, isSubmitting });
+}) => ({ stateData, defaultData, isSubmitting });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
