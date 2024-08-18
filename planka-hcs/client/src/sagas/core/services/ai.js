@@ -10,7 +10,7 @@ import { createProject } from './projects';
 import { createBoard, createBoardInCurrentProject } from './boards';
 import { createListInCurrentBoard } from './lists';
 import { createCard } from './cards';
-import { createTaskInCurrentCard } from './tasks';
+import { createTask, createTaskInCurrentCard } from './tasks';
 import { goToBoard, goToProject } from './router';
 
 export function* createAiProject(data) {
@@ -56,11 +56,20 @@ export function* createAiProject(data) {
             createCard,
             todoListId,
             { name: card.name, description: card.description },
-            true,
+            // true,
           );
-          // add tasks for the opened card
+          // // add tasks for the opened card
+          // for (const task of card.tasks) {
+          //   yield call(createTaskInCurrentCard, { name: task.name });
+          // }
+        }
+        // list all cards
+        const cardIds = yield select(selectors.selectCardIdsByListId, todoListId);
+        for (const [index, cardId] of cardIds.entries()) {
+          const card = board.cards[index];
+          // add tasks for the given card
           for (const task of card.tasks) {
-            yield call(createTaskInCurrentCard, { name: task.name });
+            yield call(createTask, cardId, { name: task.name });
           }
         }
       } else {
