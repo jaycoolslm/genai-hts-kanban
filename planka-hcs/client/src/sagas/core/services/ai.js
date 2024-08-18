@@ -105,7 +105,9 @@ export function* createAiMessage(data) {
   yield put(actions.createAiMessage.IsSubmitting(true, 'Generating response...'));
   const requestLocalId = yield call(createLocalId);
 
-  yield put(actions.createAiMessage.success(requestLocalId, data));
+  yield put(
+    actions.createAiMessage.success(requestLocalId, { role: data.role, content: data.content }),
+  );
 
   const messages = yield select(selectors.selectAiMessages);
 
@@ -113,7 +115,11 @@ export function* createAiMessage(data) {
 
   let choices;
   try {
-    ({ choices } = yield call(request, api.createChatCompletion, payload));
+    if (data.action === 'getQuestionary') {
+      ({ choices } = yield call(request, api.getQuestionary, payload));
+    } else {
+      ({ choices } = yield call(request, api.createChatCompletion, payload));
+    }
   } catch (error) {
     yield put(actions.createAiMessage.failure(error));
     yield put(actions.createAiMessage.IsSubmitting(false, ''));

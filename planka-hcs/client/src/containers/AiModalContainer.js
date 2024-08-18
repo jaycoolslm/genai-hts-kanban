@@ -26,7 +26,7 @@ const mapStateToProps = ({
       isSubmitting,
     },
   },
-}) => ({ stateData: { ...stateData, messages: mockMessages }, defaultData, isSubmitting });
+}) => ({ stateData: { ...stateData }, defaultData, isSubmitting });
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
