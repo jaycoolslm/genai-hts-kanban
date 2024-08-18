@@ -14,7 +14,13 @@ import { createTask, createTaskInCurrentCard } from './tasks';
 import { goToBoard, goToProject } from './router';
 
 export function* createAiProject(data) {
-  yield put(actions.createAiProject(data));
+  yield put(
+    actions.createAiMessage.IsSubmitting(
+      true,
+      'Formatting the product spec and preparing it for import...',
+    ),
+  );
+  // yield put(actions.createAiProject(data));
 
   // the data returned from ai formatting
   let projectData;
@@ -27,9 +33,13 @@ export function* createAiProject(data) {
 
     console.log('project data', projectData);
   } catch (error) {
+    yield put(actions.createAiMessage.IsSubmitting(false, ''));
     yield put(actions.createAiProject.failure(error));
     return;
   }
+
+  yield put(actions.createAiMessage.IsSubmitting(false, ''));
+  yield put(actions.aiCreateProjectLoading(true));
 
   // what are these actions actually doing?
   // do we need them...
@@ -77,6 +87,7 @@ export function* createAiProject(data) {
       }
     }
   }
+  yield put(actions.aiCreateProjectLoading(false));
   /* eslint-enable no-restricted-syntax */
 
   // REDIRECT TO BOARD ISN'T
@@ -91,7 +102,7 @@ export function* createAiProject(data) {
 }
 
 export function* createAiMessage(data) {
-  yield put(actions.createAiMessage.IsSubmitting(true));
+  yield put(actions.createAiMessage.IsSubmitting(true, 'Generating response...'));
   const requestLocalId = yield call(createLocalId);
 
   yield put(actions.createAiMessage.success(requestLocalId, data));
@@ -105,7 +116,7 @@ export function* createAiMessage(data) {
     ({ choices } = yield call(request, api.createChatCompletion, payload));
   } catch (error) {
     yield put(actions.createAiMessage.failure(error));
-    yield put(actions.createAiMessage.IsSubmitting(false));
+    yield put(actions.createAiMessage.IsSubmitting(false, ''));
     console.error(error);
     return;
   }
@@ -114,12 +125,12 @@ export function* createAiMessage(data) {
 
   const responseLocalId = yield call(createLocalId);
   yield put(actions.createAiMessage.success(responseLocalId, choices[0].message));
-  yield put(actions.createAiMessage.IsSubmitting(false));
+  yield put(actions.createAiMessage.IsSubmitting(false, ''));
 }
 
 export function* regenerateAiResponse() {
   yield put(actions.clearAiCreateMessageError());
-  yield put(actions.createAiMessage.IsSubmitting(true));
+  yield put(actions.createAiMessage.IsSubmitting(true, 'Generating a new response for you...'));
 
   const messages = yield select(selectors.selectAiMessages);
 
@@ -136,14 +147,14 @@ export function* regenerateAiResponse() {
     ({ choices } = yield call(request, api.createChatCompletion, payload));
   } catch (error) {
     yield put(actions.createAiMessage.failure(error));
-    yield put(actions.createAiMessage.IsSubmitting(false));
+    yield put(actions.createAiMessage.IsSubmitting(false, ''));
     console.error(error);
     return;
   }
 
   const responseLocalId = yield call(createLocalId);
   yield put(actions.createAiMessage.success(responseLocalId, choices[0].message));
-  yield put(actions.createAiMessage.IsSubmitting(false));
+  yield put(actions.createAiMessage.IsSubmitting(false, ''));
 }
 
 export default {

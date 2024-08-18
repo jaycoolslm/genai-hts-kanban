@@ -5,6 +5,7 @@ import Core from '../components/Core';
 
 const mapStateToProps = (state) => {
   const isInitializing = selectors.selectIsInitializing(state);
+  const isAiCreatingProject = selectors.selectIsAiCreatingProject(state);
   const isSocketDisconnected = selectors.selectIsSocketDisconnected(state);
   const currentModal = selectors.selectCurrentModal(state);
   const currentProject = selectors.selectCurrentProject(state);
@@ -12,6 +13,7 @@ const mapStateToProps = (state) => {
 
   return {
     isInitializing,
+    isAiCreatingProject,
     isSocketDisconnected,
     currentModal,
     currentProject,

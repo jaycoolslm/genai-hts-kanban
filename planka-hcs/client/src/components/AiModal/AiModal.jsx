@@ -10,6 +10,7 @@ import {
   TextArea,
   ButtonGroup,
   Header,
+  Icon,
 } from 'semantic-ui-react';
 import { Markdown } from '../../lib/custom-ui';
 
@@ -148,7 +149,8 @@ const AiModal = React.memo(
                 Assistant:
               </Header>
               <Message floating compact>
-                <Loader active size="tiny" inverted />
+                <Icon name="spinner" size="large" loading />
+                <span>{stateData.isSubmittingMessage}</span>
               </Message>
             </>
           )}

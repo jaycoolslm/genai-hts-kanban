@@ -24,10 +24,11 @@ createAiMessage.failure = (error) => ({
   },
 });
 
-createAiMessage.IsSubmitting = (isSubmitting) => ({
+createAiMessage.IsSubmitting = (isSubmitting, isSubmittingMessage) => ({
   type: ActionTypes.AI_MESSAGE_CREATE__IS_SUBMITTING,
   payload: {
     isSubmitting,
+    isSubmittingMessage,
   },
 });
 
@@ -35,6 +36,13 @@ const deleteAiMessage = (messageId) => ({
   type: ActionTypes.AI_MESSAGE_DELETE,
   payload: {
     id: messageId,
+  },
+});
+
+const aiCreateProjectLoading = (isAiCreatingProject) => ({
+  type: ActionTypes.AI_PROJECT_CREATE__LOADING,
+  payload: {
+    isAiCreatingProject,
   },
 });
 
@@ -46,5 +54,6 @@ const clearAiCreateMessageError = () => ({
 export default {
   createAiMessage,
   deleteAiMessage,
+  aiCreateProjectLoading,
   clearAiCreateMessageError,
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation, Trans } from 'react-i18next';
-import { Loader } from 'semantic-ui-react';
+import { Loader, Dimmer } from 'semantic-ui-react';
 
 import ModalTypes from '../../constants/ModalTypes';
 import FixedContainer from '../../containers/FixedContainer';
@@ -15,7 +15,14 @@ import styles from './Core.module.scss';
 import AiModalContainer from '../../containers/AiModalContainer';
 
 const Core = React.memo(
-  ({ isInitializing, isSocketDisconnected, currentModal, currentProject, currentBoard }) => {
+  ({
+    isInitializing,
+    isAiCreatingProject,
+    isSocketDisconnected,
+    currentModal,
+    currentProject,
+    currentBoard,
+  }) => {
     const [t] = useTranslation();
 
     const defaultTitle = useRef(document.title);
@@ -37,7 +44,7 @@ const Core = React.memo(
 
     return (
       <>
-        {isInitializing ? (
+        {isInitializing || isAiCreatingProject ? (
           <Loader active size="massive" />
         ) : (
           <>
@@ -75,6 +82,7 @@ const Core = React.memo(
 
 Core.propTypes = {
   isInitializing: PropTypes.bool.isRequired,
+  isAiCreatingProject: PropTypes.bool.isRequired,
   isSocketDisconnected: PropTypes.bool.isRequired,
   currentModal: PropTypes.oneOf(Object.values(ModalTypes)),
   /* eslint-disable react/forbid-prop-types */

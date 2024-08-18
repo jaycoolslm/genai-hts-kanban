@@ -3,6 +3,8 @@ import ActionTypes from '../constants/ActionTypes';
 const initialState = {
   messages: [],
   isSubmitting: false,
+  isSubmittingMessage: '',
+  isAiCreatingProject: false,
   hasError: false,
   error: null,
 };
@@ -38,6 +40,12 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         isSubmitting: payload.isSubmitting,
+        isSubmittingMessage: payload.isSubmittingMessage,
+      };
+    case ActionTypes.AI_PROJECT_CREATE__LOADING:
+      return {
+        ...state,
+        isAiCreatingProject: payload.isAiCreatingProject,
       };
     default:
       return state;
