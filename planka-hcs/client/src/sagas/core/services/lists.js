@@ -12,13 +12,7 @@ export function* createList(boardId, data) {
     position: yield select(selectors.selectNextListPosition, boardId),
   };
 
-  let localId;
-
-  if (data.localId) {
-    localId = data.localId;
-  } else {
-    localId = yield call(createLocalId);
-  }
+  const localId = yield call(createLocalId);
 
   yield put(
     actions.createList({

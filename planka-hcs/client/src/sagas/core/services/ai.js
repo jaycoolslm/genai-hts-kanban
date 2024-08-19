@@ -7,11 +7,10 @@ import selectors from '../../../selectors';
 
 import { createLocalId } from '../../../utils/local-id';
 import { createProject } from './projects';
-import { createBoard, createBoardInCurrentProject } from './boards';
+import { createBoardInCurrentProject } from './boards';
 import { createListInCurrentBoard } from './lists';
 import { createCard } from './cards';
-import { createTask, createTaskInCurrentCard } from './tasks';
-import { goToBoard, goToProject } from './router';
+import { createTask } from './tasks';
 
 export function* createAiProject(data) {
   yield put(
@@ -20,18 +19,12 @@ export function* createAiProject(data) {
       'Formatting the product spec and preparing it for import...',
     ),
   );
-  // yield put(actions.createAiProject(data));
-
-  // the data returned from ai formatting
   let projectData;
-
   let project;
   let projectManagers;
 
   try {
     projectData = yield call(request, api.formatSpec, data);
-
-    console.log('project data', projectData);
   } catch (error) {
     yield put(actions.createAiMessage.IsSubmitting(false, ''));
     yield put(actions.createAiProject.failure(error));
@@ -53,25 +46,15 @@ export function* createAiProject(data) {
     yield call(createBoardInCurrentProject, { name: board.name });
     // create lists in board
     const LISTS = ['To do', 'In Progress', 'In Review', 'Complete'];
-    const todoListLocalId = yield call(createLocalId);
     for (const list of LISTS) {
       // if To do list, add cards here
       if (list === LISTS[0]) {
-        yield call(createListInCurrentBoard, { name: list, localId: todoListLocalId });
+        yield call(createListInCurrentBoard, { name: list });
         const listIds = yield select(selectors.selectListIdsForCurrentBoard);
         const todoListId = listIds[0];
         // iterate over cards and add
         for (const card of board.cards) {
-          yield call(
-            createCard,
-            todoListId,
-            { name: card.name, description: card.description },
-            // true,
-          );
-          // // add tasks for the opened card
-          // for (const task of card.tasks) {
-          //   yield call(createTaskInCurrentCard, { name: task.name });
-          // }
+          yield call(createCard, todoListId, { name: card.name, description: card.description });
         }
         // list all cards
         const cardIds = yield select(selectors.selectCardIdsByListId, todoListId);
