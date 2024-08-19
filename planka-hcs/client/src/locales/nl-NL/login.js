@@ -4,7 +4,7 @@ export default {
       emailOrUsername: 'E-mail of gebruikersnaam',
       invalidEmailOrUsername: 'Ongeldig e-mailadres of gebruikersnaam',
       invalidPassword: 'Ongeldig wachtwoord',
-      logInToPlanka: 'Inloggen bij Planka',
+      logInToPlanka: 'Inloggen bij Kanban 3.0',
       noInternetConnection: 'Geen internetverbinding',
       pageNotFound_title: 'Pagina niet gevonden',
       password: 'Wachtwoord',

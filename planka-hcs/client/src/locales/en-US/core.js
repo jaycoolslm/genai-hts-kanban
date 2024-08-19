@@ -11,7 +11,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'About Planka',
+      aboutPlanka: 'About Kanban 3.0',
       account: 'Account',
       actions: 'Actions',
       addAttachment_title: 'Add Attachment',

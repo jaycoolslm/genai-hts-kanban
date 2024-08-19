@@ -4,7 +4,7 @@ export default {
       emailOrUsername: 'E-mail sau nume de utilizator',
       invalidEmailOrUsername: 'E-mail sau nume de utilizator introduse greșit',
       invalidPassword: 'Parola greșita',
-      logInToPlanka: 'Autentificarea în Planka',
+      logInToPlanka: 'Autentificarea în Kanban 3.0',
       noInternetConnection: 'Lipsește conexiunea cu internet',
       pageNotFound_title: 'Pagina n-a fost găsită',
       password: 'Parola',
