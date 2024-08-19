@@ -20,23 +20,16 @@ export function* createAiProject(data) {
     ),
   );
   let projectData;
-  let project;
-  let projectManagers;
 
   try {
     projectData = yield call(request, api.formatSpec, data);
   } catch (error) {
     yield put(actions.createAiMessage.IsSubmitting(false, ''));
-    yield put(actions.createAiProject.failure(error));
     return;
   }
 
   yield put(actions.createAiMessage.IsSubmitting(false, ''));
   yield put(actions.aiCreateProjectLoading(true));
-
-  // what are these actions actually doing?
-  // do we need them...
-  yield put(actions.createAiProject.success(project, projectManagers));
 
   yield call(createProject, { name: projectData.projectName });
 
