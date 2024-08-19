@@ -53,7 +53,6 @@ export class AiController {
     summary: 'Format project specification',
   })
   async formatSpec(@Body() dto: FormatSpecDto) {
-    console.log('invoked format spec endoint');
     return this.service.formatSpec(dto);
   }
 }
