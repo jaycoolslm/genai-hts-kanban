@@ -1,4 +1,4 @@
-import { call, put, select, all } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import actions from '../../../actions';
 import request from '../request';
@@ -72,16 +72,6 @@ export function* createAiProject(data) {
   }
   yield put(actions.aiCreateProjectLoading(false));
   /* eslint-enable no-restricted-syntax */
-
-  // REDIRECT TO BOARD ISN'T
-  // TODO fix redirect after creating
-
-  // const currentProject = yield select(selectors.selectCurrentProject);
-  // const currentBoard = yield select(selectors.selectCurrentBoard);
-  // console.log('current project: ', currentProject);
-  // console.log('current board: ', currentBoard);
-  // yield call(goToProject, currentProject.id);
-  // yield call(goToBoard, currentBoard.id);
 }
 
 export function* createAiMessage(data) {
