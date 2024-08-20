@@ -15,7 +15,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'O aplikaci Planka',
+      aboutPlanka: 'O aplikaci Kanban 3.0',
       account: 'Účet',
       actions: 'Akce',
       addAttachment_title: 'Přidat přílohu',

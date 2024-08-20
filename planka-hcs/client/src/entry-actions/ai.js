@@ -7,6 +7,11 @@ const aiMessageCreate = (data) => ({
   },
 });
 
+const aiMessageRegenerateResponse = () => ({
+  type: EntryActionTypes.AI_MESSAGE_REGENERATE_RESPONSE,
+});
+
 export default {
   aiMessageCreate,
+  aiMessageRegenerateResponse,
 };

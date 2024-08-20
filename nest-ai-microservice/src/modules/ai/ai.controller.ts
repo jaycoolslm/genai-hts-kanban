@@ -14,7 +14,7 @@ import { FormatSpecDto } from './dto/format-spec.dto';
 
 @Controller('ai')
 export class AiController {
-  constructor(private readonly service: AiService) { }
+  constructor(private readonly service: AiService) {}
 
   @Get('models')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -42,7 +42,7 @@ export class AiController {
     description: 'Performs a chat completion',
     summary: 'Performs a chat completion',
   })
-  async complete(@Body() dto: ChatCompletionDto) {
+  async complete(@Body() dto: ChatCompletionDto[]) {
     return this.service.completion(dto);
   }
 

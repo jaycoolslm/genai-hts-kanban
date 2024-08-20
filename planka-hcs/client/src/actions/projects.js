@@ -1,5 +1,38 @@
 import ActionTypes from '../constants/ActionTypes';
 
+const createAiProject = (data) => ({
+  type: ActionTypes.AI_PROJECT_CREATE,
+  payload: {
+    data,
+  },
+});
+
+createAiProject.success = (project, projectManagers) => ({
+  type: ActionTypes.AI_PROJECT_CREATE__SUCCESS,
+  payload: {
+    project,
+    projectManagers,
+  },
+});
+
+createAiProject.failure = (error) => ({
+  type: ActionTypes.AI_PROJECT_CREATE__FAILURE,
+  payload: {
+    error,
+  },
+});
+
+const handleAiProjectCreate = (project, users, projectManagers, boards, boardMemberships) => ({
+  type: ActionTypes.PROJECT_CREATE_HANDLE,
+  payload: {
+    project,
+    users,
+    projectManagers,
+    boards,
+    boardMemberships,
+  },
+});
+
 const createProject = (data) => ({
   type: ActionTypes.PROJECT_CREATE,
   payload: {
@@ -115,6 +148,8 @@ const handleProjectDelete = (project) => ({
 });
 
 export default {
+  createAiProject,
+  handleAiProjectCreate,
   createProject,
   handleProjectCreate,
   updateProject,
