@@ -25,3 +25,9 @@ create .env file from example - add your own OpenAI API key
 ### Test app
 
 Head over to http://localhost:3000 (it may take a while to load in first time)
+
+## 'Prod' use
+
+head over to https://kanban3.xyz
+email: demo@demo.demo
+pw: demo
