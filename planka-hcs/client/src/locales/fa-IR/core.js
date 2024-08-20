@@ -15,7 +15,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'درباره Planka',
+      aboutPlanka: 'درباره Kanban 3.0',
       account: 'حساب کاربری',
       actions: 'اقدامات',
       addAttachment_title: 'اضافه کردن پیوست',

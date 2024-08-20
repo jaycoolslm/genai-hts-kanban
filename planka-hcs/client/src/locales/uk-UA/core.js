@@ -15,7 +15,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'Про Planka',
+      aboutPlanka: 'Про Kanban 3.0',
       account: 'Обліковий запис',
       actions: 'Дії',
       addAttachment_title: 'Додати Вкладення',

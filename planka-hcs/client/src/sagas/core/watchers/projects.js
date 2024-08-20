@@ -5,6 +5,12 @@ import EntryActionTypes from '../../../constants/EntryActionTypes';
 
 export default function* projectsWatchers() {
   yield all([
+    takeEvery(EntryActionTypes.AI_PROJECT_CREATE, ({ payload: { data } }) =>
+      services.createAiProject(data),
+    ),
+    takeEvery(EntryActionTypes.AI_PROJECT_CREATE_HANDLE, ({ payload: { project } }) =>
+      services.handleAiProjectCreate(project),
+    ),
     takeEvery(EntryActionTypes.PROJECT_CREATE, ({ payload: { data } }) =>
       services.createProject(data),
     ),

@@ -1,5 +1,19 @@
 import EntryActionTypes from '../constants/EntryActionTypes';
 
+const createAiProject = (data) => ({
+  type: EntryActionTypes.AI_PROJECT_CREATE,
+  payload: {
+    data,
+  },
+});
+
+const handleAiProjectCreate = (project) => ({
+  type: EntryActionTypes.AI_PROJECT_CREATE_HANDLE,
+  payload: {
+    project,
+  },
+});
+
 const createProject = (data) => ({
   type: EntryActionTypes.PROJECT_CREATE,
   payload: {
@@ -48,6 +62,8 @@ const handleProjectDelete = (project) => ({
 });
 
 export default {
+  createAiProject,
+  handleAiProjectCreate,
   createProject,
   handleProjectCreate,
   updateCurrentProject,

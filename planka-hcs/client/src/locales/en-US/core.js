@@ -11,7 +11,7 @@ export default {
 
   translation: {
     common: {
-      aboutPlanka: 'About Planka',
+      aboutPlanka: 'About Kanban 3.0',
       account: 'Account',
       actions: 'Actions',
       addAttachment_title: 'Add Attachment',
@@ -58,6 +58,8 @@ export default {
       createNewOneOrSelectExistingOne: 'Create a new one or select<br />an existing one.',
       createProject_title: 'Create Project',
       createTextFile_title: 'Create Text File',
+      createProjectWithAi_title: 'Create Project with AI',
+      enterMessage: 'Enter message...',
       currentPassword: 'Current password',
       dangerZone_title: 'Danger Zone',
       date: 'Date',

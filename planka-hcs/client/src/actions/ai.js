@@ -17,13 +17,43 @@ createAiMessage.success = (localId, message) => ({
   },
 });
 
-createAiMessage.IsSubmitting = (isSubmitting) => ({
+createAiMessage.failure = (error) => ({
+  type: ActionTypes.AI_MESSAGE_CREATE__FAILURE,
+  payload: {
+    error,
+  },
+});
+
+createAiMessage.IsSubmitting = (isSubmitting, isSubmittingMessage) => ({
   type: ActionTypes.AI_MESSAGE_CREATE__IS_SUBMITTING,
   payload: {
     isSubmitting,
+    isSubmittingMessage,
   },
+});
+
+const deleteAiMessage = (messageId) => ({
+  type: ActionTypes.AI_MESSAGE_DELETE,
+  payload: {
+    id: messageId,
+  },
+});
+
+const aiCreateProjectLoading = (isAiCreatingProject) => ({
+  type: ActionTypes.AI_PROJECT_CREATE__LOADING,
+  payload: {
+    isAiCreatingProject,
+  },
+});
+
+const clearAiCreateMessageError = () => ({
+  type: ActionTypes.AI_ERROR_CLEAR,
+  payload: {},
 });
 
 export default {
   createAiMessage,
+  deleteAiMessage,
+  aiCreateProjectLoading,
+  clearAiCreateMessageError,
 };

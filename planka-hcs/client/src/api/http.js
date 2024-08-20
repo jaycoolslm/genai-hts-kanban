@@ -30,7 +30,7 @@ const http = {};
     return fetch(apiUrl, {
       method,
       headers: reqHeaders,
-      body: reqBody,
+      body: method === 'POST' ? reqBody : undefined,
     })
       .then((response) =>
         response.json().then((body) => ({

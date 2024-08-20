@@ -1,5 +1,4 @@
 import { call, put, select } from 'redux-saga/effects';
-
 import { goToProject, goToRoot } from './router';
 import request from '../request';
 import selectors from '../../../selectors';

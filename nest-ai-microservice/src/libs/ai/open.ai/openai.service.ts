@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
+import { z } from 'zod';
 import { ChatCompletionMessageParam } from 'openai/resources';
+import { zodResponseFormat } from 'openai/helpers/zod';
 
 @Injectable()
 export class OpenAiService {
@@ -32,6 +34,21 @@ export class OpenAiService {
       messages: messages,
       model: modelId,
       max_tokens: maxTokens,
+    });
+  }
+
+  async structuredDataExtraction(
+    ZodObject: z.ZodObject<any>,
+    messages: ChatCompletionMessageParam[],
+    modelId: string = this.DEFAULT_MODEL,
+  ) {
+    return await this.client.beta.chat.completions.parse({
+      model: modelId,
+      messages,
+      response_format: zodResponseFormat(
+        ZodObject,
+        'structured_data_extraction',
+      ),
     });
   }
 }

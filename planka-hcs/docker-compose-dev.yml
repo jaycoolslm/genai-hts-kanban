@@ -65,7 +65,7 @@ services:
       # - SLACK_BOT_TOKEN=
       # - SLACK_CHANNEL_ID=
     working_dir: /app
-    command: ["sh", "-c", "npm run start"]
+    command: ['sh', '-c', 'npm run start']
     depends_on:
       postgres:
         condition: service_healthy
@@ -87,6 +87,7 @@ services:
       - REACT_APP_HEDERA_CLIENT_ID=0.0.4661228 # this is a testnet account
       - REACT_APP_HEDERA_CLIENT_KEY=302e020100300506032b657004220420d02c953c2a85e819de1caba134f80bcfd6ab7aff6453b7968484be1c2f83beff # this is a testnet account
       - REACT_APP_HEDERA_TOPIC_ID=0.0.4661206
+      - REACT_APP_AI_BASE_URL=http://localhost:3001/v1/ai
     working_dir: /app/client
     command: npm start
 
@@ -103,7 +104,7 @@ services:
       - DEFAULT_ADMIN_USERNAME=demo
       - DEFAULT_ADMIN_HEDERA_ACCOUNT=0.0.2599594
     working_dir: /app
-    command: ["sh", "-c", "npm run db:init"]
+    command: ['sh', '-c', 'npm run db:init']
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -120,10 +121,10 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - '5432:5432'
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d planka_db"]
+      test: ['CMD-SHELL', 'pg_isready -U user -d planka_db']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -131,7 +132,7 @@ services:
   proxy:
     image: nginx:alpine
     ports:
-      - "3000:80"
+      - '3000:80'
     volumes:
       - ./config/development/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
