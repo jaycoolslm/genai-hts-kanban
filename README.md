@@ -8,6 +8,8 @@
 
 update env vars in line 86 - 88
 
+NOTE: currently the app has testnet private keys in the client side. THIS IS NOT SAFE and is known - the risk has been flagged up in our deck with a respective mitigation. Any production application following this hackathon would of course not be configured as such
+
 `docker compose -f docker-compose-dev.yml up` (this may take a while!)
 
 ### HCS Listener
