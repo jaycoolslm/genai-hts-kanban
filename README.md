@@ -30,9 +30,9 @@ open new terminal
 
 create .env file from example - add your own OpenAI API key
 
-`npm i`
+`pnpm i`
 
-`npm run start:dev`
+`pnpm run start:dev`
 
 ### Test app
 
